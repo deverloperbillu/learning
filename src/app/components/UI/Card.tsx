@@ -2,24 +2,20 @@
 import Image from 'next/image'
 
 type ProductData = {
-  poster_path: string;
+  image: string;
   title: string;
-  release_date: string;
+  price: number;
+  category: string;
 };
 
 export const Card = ({getProductData}: { getProductData: ProductData }) => {
-const {poster_path, title, release_date} = getProductData;
+const {image, title, price, category} = getProductData;
 
-const formattedDate = new Date(release_date).toLocaleDateString ("en-US",{
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-});
   return (
         <div className="product-card text-center bg-white">
             <div className="image-container mb-2">
                 <Image 
-                src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+                src={image}
                 alt={title}
                 width={500}
                 height={750}
@@ -27,7 +23,8 @@ const formattedDate = new Date(release_date).toLocaleDateString ("en-US",{
                 />
             </div>
             <h2 className='text-[#000] text-[14px]'>{title}</h2>
-            <h3 className='text-[#000] font-semibold'>{formattedDate}</h3>
+            <p className='text-[#000]'>${price}</p>
+            <h3 className='text-[#000]'>{category}</h3>
         </div>
   )
 }

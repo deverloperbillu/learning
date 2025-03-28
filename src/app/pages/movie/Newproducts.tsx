@@ -1,26 +1,31 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Card } from '../components/UI/Card';
+import { Card } from '../../components/UI/Card';
 import axios from 'axios';
 import Link from 'next/link';
 
 interface Product {
     id: number;
-    poster_path: string;
+    image: string;
     title: string;
-    release_date: string;
+    price: number;
+    category: string;
 }
 
 export const Newproducts: React.FC = () => {
     const [data, setData] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+    
 
     const getProductData = async () => {
         try {
-            const res = await axios.get("https://api.themoviedb.org/3/movie/top_rated?api_key=c62c3163dbec54e228f2e9f7af394281");
+            const res = await axios.get(`https://fakestoreapi.com/products`);
             console.log(res.data); 
-            setData(res.data.results);
+            setData(res.data);
+            setLoading(false);
         } catch (error) {
             console.log(error);
+            setLoading(false);
         }
     };
 
@@ -28,18 +33,22 @@ export const Newproducts: React.FC = () => {
         getProductData();
     }, []);
 
+    if (loading) return <div className="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center h-full">Loading...</div>;
+    if (!data) return <p className="text-center text-red-500">Data not found!</p>;
+
     return (
-        <ul className='max-w-7xl mx-auto grid grid-cols-4 gap-4 w-full my-8'>
+        <ul className='max-w-7xl mx-auto grid grid-cols-3 gap-4 w-full my-8'>
             {data.map((apidata) => {
                 const productData = {
-                    poster_path: apidata.poster_path,
+                    image: apidata.image,
                     title: apidata.title,
-                    release_date: apidata.release_date,
+                    price: apidata.price,
+                    category: apidata.category,
                     id: apidata.id.toString(),
                 };
                 return (
                     <li key={productData.id} className="list-none">
-                        <Link href={`/movie/${productData.id}`} >
+                        <Link href={`pages/movie/${productData.id}`} >
                             <Card getProductData={productData} />
                         </Link>
                     </li>

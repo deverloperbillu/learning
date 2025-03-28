@@ -1,4 +1,4 @@
-import { Newproducts } from './pages/Newproducts';
+import { Newproducts } from "./pages/movie/Newproducts";
 
 export default function Home() {
   return (
